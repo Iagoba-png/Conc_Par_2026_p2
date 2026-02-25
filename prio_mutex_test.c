@@ -46,9 +46,9 @@ int main() {
     prio_mutex_lock(&mutex, 0);
 
     pthread_t t_high, t_med, t_low;
+    pthread_create(&t_low, NULL, thread_low, &mutex);
     pthread_create(&t_high, NULL, thread_high, &mutex);
     pthread_create(&t_med, NULL, thread_medium, &mutex);
-    pthread_create(&t_low, NULL, thread_low, &mutex);
 
     usleep(50000); // esperamos a que todos estén esperando
     printf("Main libera, ahora debe adquirir el de mayor prioridad\n");
