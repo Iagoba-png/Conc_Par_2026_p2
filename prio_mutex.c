@@ -50,7 +50,6 @@ int prio_mutex_destroy(prio_mutex_t *m) {
     return 0;
 }
 
-// Función auxiliar: comprueba si hay algún hilo esperando con prioridad mayor que 'prio'
 static int has_higher_waiting(prio_mutex_t *m, int prio) {
     for (int p = m->num_prios - 1; p > prio; p--)
         if (m->waiting_counts[p] > 0) return 1;
