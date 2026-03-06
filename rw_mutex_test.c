@@ -1,3 +1,5 @@
+//No lo pide el enunciado pero no estaba seguro de si para la tarea 3 hacía falta hacer un programa de prueba
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>

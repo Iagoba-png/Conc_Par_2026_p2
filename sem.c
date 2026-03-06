@@ -1,6 +1,5 @@
 #include "sem.h"
 #include <pthread.h>
-#include <stdlib.h>
 
 int sem_init(sem_t *s, int value) {
     if (s == NULL) return -1;
