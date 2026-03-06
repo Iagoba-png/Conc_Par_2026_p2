@@ -41,7 +41,6 @@ int main() {
     prio_mutex_t mutex;
     prio_mutex_init(&mutex, NUM_PRIOS);
 
-    // Primero el main toma el mutex con prioridad baja
     printf("Main bloquea con prioridad baja\n");
     prio_mutex_lock(&mutex, 0);
 
@@ -50,7 +49,7 @@ int main() {
     pthread_create(&t_high, NULL, thread_high, &mutex);
     pthread_create(&t_med, NULL, thread_medium, &mutex);
 
-    usleep(50000); // esperamos a que todos estén esperando
+    usleep(50000);
     printf("Main libera, ahora debe adquirir el de mayor prioridad\n");
     prio_mutex_unlock(&mutex);
 

@@ -2,18 +2,12 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-struct sem_t {
-    int value;
-    pthread_mutex_t mutex;
-    pthread_cond_t cond;
-};
-
 int sem_init(sem_t *s, int value) {
     if (s == NULL) return -1;
-    int ret = pthread_mutex_init(&s->mutex, NULL);
-    if (ret != 0) return -1;
-    ret = pthread_cond_init(&s->cond, NULL);
-    if (ret != 0) {
+    if (pthread_mutex_init(&s->mutex, NULL)!=0) {
+        return -1;
+    }
+    if (pthread_cond_init(&s->cond, NULL) != 0) {
         pthread_mutex_destroy(&s->mutex);
         return -1;
     }

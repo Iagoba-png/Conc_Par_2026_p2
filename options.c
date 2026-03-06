@@ -42,7 +42,7 @@ static int get_int(char *arg, int *value)
     char *end;
     *value = strtol(arg, &end, 10);
 
-    return (end != NULL);
+    return (end == '\0');
 }
 
 int handle_options(int argc, char **argv, struct options *opt)

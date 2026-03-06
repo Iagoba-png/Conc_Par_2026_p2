@@ -6,9 +6,9 @@ struct rw_mutex_t {
     pthread_mutex_t lock;
     pthread_cond_t read_cond;
     pthread_cond_t write_cond;
-    int readers;           // número de lectores activos
-    int writer;            // 1 si hay escritor activo
-    int waiting_writers;   // escritores esperando
+    int readers;
+    int writer;
+    int waiting_writers;
 };
 
 int rw_mutex_init(rw_mutex_t *m) {

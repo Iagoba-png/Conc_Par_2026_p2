@@ -1,7 +1,12 @@
 #ifndef __SEM_H__
 #define __SEM_H__
+#include <pthread.h>
 
-typedef struct sem_t sem_t;
+typedef struct sem_t {
+    int value;
+    pthread_mutex_t mutex;
+    pthread_cond_t cond;
+}sem_t;
 
 int sem_init(sem_t *s, int value);
 int sem_destroy(sem_t *s);

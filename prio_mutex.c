@@ -3,11 +3,11 @@
 #include <stdlib.h>
 
 struct prio_mutex_t {
-    pthread_mutex_t lock;           // protege la estructura
-    int locked;                     // 1 si está ocupado
-    int num_prios;                  // número de prioridades
-    int *waiting_counts;            // contadores de espera por prioridad
-    pthread_cond_t *conds;          // variables de condición por prioridad
+    pthread_mutex_t lock;
+    int locked;
+    int num_prios;
+    int *waiting_counts;
+    pthread_cond_t *conds;
 };
 
 int prio_mutex_init(prio_mutex_t *m, int num_prios) {
@@ -72,7 +72,7 @@ int prio_mutex_lock(prio_mutex_t *m, int prio) {
 int prio_mutex_unlock(prio_mutex_t *m) {
     pthread_mutex_lock(&m->lock);
     m->locked = 0;
-    // Despertar al hilo de mayor prioridad que esté esperando
+
     for (int p = m->num_prios - 1; p >= 0; p--) {
         if (m->waiting_counts[p] > 0) {
             pthread_cond_signal(&m->conds[p]);
@@ -85,20 +85,10 @@ int prio_mutex_unlock(prio_mutex_t *m) {
 
 int prio_mutex_trylock(prio_mutex_t *m) {
     pthread_mutex_lock(&m->lock);
-    if (!m->locked && !has_higher_waiting(m, -1)) { // -1 no tiene sentido, pero no hay prioridad fija
-        // El mutex está libre y no hay esperas de mayor prioridad (como no hay prioridad dada, consideramos que cualquier espera es mayor? Mejor usar una prioridad ficticia)
-        // Para trylock, simplemente comprobamos si está libre sin considerar esperas.
-        // Sin embargo, la política de prioridad debería aplicarse también al trylock? Normalmente trylock es no bloqueante, así que tomamos si está libre.
-        // Pero para mantener coherencia, si hay esperas de mayor prioridad, quizá no debería concederse el lock a un trylock de menor prioridad.
-        // Optamos por: si está libre y no hay ningún hilo esperando con prioridad mayor a la que podría tener el que llama? Pero no sabemos prioridad.
-        // Como trylock no recibe prioridad, lo interpretamos como un intento con prioridad baja (0) o simplemente ignoramos prioridades.
-        // Lo más simple: trylock solo tiene éxito si está libre, independientemente de las esperas.
-        // Así lo implementamos.
-        if (!m->locked) {
-            m->locked = 1;
-            pthread_mutex_unlock(&m->lock);
-            return 0;
-        }
+    if (!m->locked) {
+        m->locked = 1;
+        pthread_mutex_unlock(&m->lock);
+        return 0;
     }
     pthread_mutex_unlock(&m->lock);
     return -1;

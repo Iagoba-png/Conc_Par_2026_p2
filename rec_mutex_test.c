@@ -42,13 +42,14 @@ int main() {
     }
 
     pthread_t threads[NUM_THREADS];
-    for (int i = 0; i < NUM_THREADS; i++)
+    for (int i = 0; i < NUM_THREADS; i++) {
         pthread_create(&threads[i], NULL, worker, &data);
+    }
 
-    for (int i = 0; i < NUM_THREADS; i++)
+    for (int i = 0; i < NUM_THREADS; i++) {
         pthread_join(threads[i], NULL);
+    }
 
-    // Verificación: la suma debe ser la misma
     int sum = 0;
     for (int i = 0; i < ARRAY_SIZE; i++) {
         sum += data.array[i];
@@ -56,8 +57,9 @@ int main() {
     }
     printf("\nSuma: %d (debe ser %d)\n", sum, ARRAY_SIZE*(ARRAY_SIZE-1)/2);
 
-    for (int i = 0; i < ARRAY_SIZE; i++)
+    for (int i = 0; i < ARRAY_SIZE; i++) {
         rec_mutex_destroy(data.mutex);
+    }
 
     return 0;
 }
